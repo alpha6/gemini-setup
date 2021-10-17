@@ -1,7 +1,43 @@
 
 # FLASHING GEMINI
+
 ## INSTALL DEBIAN ONLY (only one partition, no other os)
-1. Install and configure FlashTool
+
+## Prepare firmware
+
+So as planet no provide Linux only firmware you have to do it by yourself.
+
+First of all you need to get a firmware with only one linux partition:
+
+1. Go here :  http://support.planetcom.co.uk/partitionTool.html
+1. Select gemini version (4G or wifi)
+1. Boot 1 : select Sailfish (no this is not an error)
+1. Reserve all partition to linux
+1. Download scatter file
+1. Download base firmware
+
+Next we need a standard Debian image:
+1. Boot 1 : select android standard
+1. Boot 2 : select debian
+1. Reserve partition for debian & android (exact sizes doesn't matter)
+1. Download aditional debian firmware
+
+At this you have 3 files :
+* Scatter file for Sailfish OS
+* Base firmware
+* Debian firmware
+
+Create a folder
+* Unzip base firmware inside
+* Unzip debian inside
+* Copy scatter file inside
+
+Now you have to replace all sailfishos_boot.img to debian_boot.img in the scatter file. 
+There is a simple perl oneliner to do it:
+
+    perl -p -i -e "s/sailfishos_boot/debian_boot/g" Gemini_x25_x27_LinuxOnly.txt
+
+## Install and configure FlashTool
 
 - Download FlashTool 
 ```
@@ -31,36 +67,7 @@
     sudo ./flash_tool.sh
 ```
 
-## Prepare firmware
-1. go here :  http://support.planetcom.co.uk/partitionTool.html
-2. select gemini version (4G or wifi)
-3. boot 1 : select Sailfish (no this is not an error)
-4. move cursor to reserve all partition to linux
-5. download scatter file
-6. download base firmware
-7. boot 1 : select android standard
-8. boot 2 : select debian
-9. move cursor to reserve partition for debian & android
-10. download aditional debian firmware
-
-*so you have 3 files :
--scatter file for selfish os
--base firmware
--debian firmware
-
-*create a folder
--dezip base firmware inside
--dezip debian inside
--copy scatter file inside
-
-*download Notepad++ (or something like this and make sure the file Line ending is set to Unix (LF))
-
-*go inside created folder
--open scatter file with notepad++
--search for ALL sailfishos_boot.img and replace it with debian_boot.img. Save the file
-
-*open flashtool
--go to « download » tab
+- Go to «Download» tab
 -download-Agent : should be set to the file MTK_AllInOne_DA.bin (which is located in the FlashToolWindows or FlashToolLinux folder).
 -scatter loading file : choose the scatter file that you have modifyed just before
 
