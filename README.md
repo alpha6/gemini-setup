@@ -17,6 +17,7 @@ First of all you need to get a firmware with only one linux partition:
 1. Download base firmware
 
 Next we need a standard Debian image:
+
 1. Boot 1 : select android standard
 1. Boot 2 : select debian
 1. Reserve partition for debian & android (exact sizes doesn't matter)
@@ -27,7 +28,7 @@ At this you have 3 files :
 * Base firmware
 * Debian firmware
 
-Create a folder
+Create a folder:
 * Unzip base firmware inside
 * Unzip debian inside
 * Copy scatter file inside
@@ -67,54 +68,67 @@ There is a simple perl oneliner to do it:
     sudo ./flash_tool.sh
 ```
 
-- Go to «Download» tab
--download-Agent : should be set to the file MTK_AllInOne_DA.bin (which is located in the FlashToolWindows or FlashToolLinux folder).
--scatter loading file : choose the scatter file that you have modifyed just before
+- Go to "Download" tab
+ * Download-Agent : should be set to the file MTK_AllInOne_DA.bin (which is located in the FlashToolWindows or FlashToolLinux folder).
+ * Scatter loading file : choose the scatter file that you have modifyed just before
 
-all the files  in colums must be checked and location not empty
+All the files in colums must be checked and location not empty
 
-[1.1.3] BACKUP NVRAM
--go to « readback » tab
--click « add » button. A row will appear in the table under.
--click « Read Back » button
-connect your PC to the left end USB-C port on your Gemini and restart the Gemini. Once booted, the flash tool will detect the unit and will write the NVRAM partition on a file on your hard disk called NVRAM0. It’s a good idea to keep this file as a backup, together with the customised Scatter file.
+## BACKUP NVRAM
+- Go to Readback tab
+- Click "Add" button. A row will appear in the table under.
+- Click "Read Back" button
+connect your PC to the left end USB-C port on your Gemini and restart the Gemini. Once booted, the flash tool will detect the unit and will write the NVRAM partition on a file on your hard disk called NVRAM0. Ithink it's a good idea to keep this file as a backup, together with the customised Scatter file.
 
-[1.1.4] FLASHING FIRMWARE
--click « Download » tab.
--drop-down list : select « Firmware Upgrade » option from the drop down menu
--click big « download » button
--connect your PC to the left end USB-C port on your Gemini and restart the Gemini. Once booting, the flash tool will detect the unit and will start flashing the device with the selected firmware.
--wait the end of flashing
--deconnect gemini of pc
-
-
-[2] LAUNCH DEBIAN
--press esc button a long time, and wainting for the login page
--on login page, select your country in « layout » drop-down list and enter password « gemini » under the username
+## FLASHING FIRMWARE
+- Select "Download" tab.
+- In the drop-down list select "Firmware Upgrade" option
+- Click big "Download"  button
+- Connect your PC to the left end USB-C port on your Gemini and restart the Gemini. Once booting, the flash tool will detect the unit and will start flashing the device with the selected firmware.
+- Wait the end of flashing
+- Disconnect the Gemini from the PC
 
 
-[3.5] UPDATE
+## LAUNCH DEBIAN
+- Press esc button a long time, and wainting for the login page
+- On login screen enter password gemini under the username
+
+
+## UPDATE
+
 VERY important -> do not make apt update & upgrade before THIS. If not, you will break all the file system.
-[3.5.1] ADD REPOSITORY ARCHIVE KEY
--in qTerminal, on root account enter :
-$ wget http://gemian.thinkglobally.org/archive-key.asc
-$ apt-key add archive-key.asc
-$ apt update
-apt install apt-transport-https
-$ apt upgrade
 
-[3.5.3] MAJ DEBIAN 9 to 10 & Security updates
-[3.5.3.1] SECURITY UPDATES
--in qTerminal, on root account enter :
-$ nano /etc/apt/sources.list.d/multistrap-debian.list
--you must have :
-deb [arch=arm64] http://http.debian.net/debian stretch main contrib non-free
-deb-src [arch=arm64] http://http.debian.net/debian stretch main contrib non-free
--add :
-deb [arch=arm64] http://security.debian.org/debian-security stretch/updates main contrib non-free
-[3.5.3.2] INSTALL SOME SOFTWARE THAT ARE NOT IN THE STRETCH VERSION
--add :
-deb [arch=arm64] http://http.debian.net/debian stretch-backports main contrib non-free
+* Add the repository key
+
+	wget http://gemian.thinkglobally.org/archive-key.asc
+	sudo apt-key add archive-key.asc
+
+
+* Disable SSL check for gemian.thinkglobally.org
+In case the Let's Encrypt certificate has expired on 30 September and very old version on OpenSSL in the Stetch apt can't validate the repo certifcate. So you need to disable certificate checking for the repo.
+
+
+	sudo nano /etc/apt/apt.conf.d/99disablesslcheck 
+
+	Acquire::https::gemian.thinkglobally.org::Verify-Host "false";
+	Acquire::https::gemian.thinkglobally.org::Verify-Peer "false";
+
+* Upgrade the system
+
+	sudo apt update
+	sudo apt install apt-transport-https
+	sudo apt upgrade
+
+## DEBIAN 9 Security updates and backports
+
+- Edit the apt config :
+
+	$ sudo nano /etc/apt/sources.list.d/multistrap-debian.list
+
+- Add following to the end:
+
+	deb [arch=arm64] http://security.debian.org/debian-security stretch/updates main contrib non-free
+	deb [arch=arm64] http://http.debian.net/debian stretch-backports main contrib non-free
 
 ## Disable Wifi MAC generation
 
@@ -132,7 +146,7 @@ This will lock down the mac address.
 
 You need to install connman-plugin-suspend-wmtwifi to avoid this:
 
-sudo apt install connman-plugin-suspend-wmtwifi
+	sudo apt install connman-plugin-suspend-wmtwifi
 
 Turns out this plugin just stops the repeated re-connection's to wifi. It still eats lots of battery.
 
@@ -149,16 +163,15 @@ This basically forces a reinstall of all the libreoffice debian packages.
 
     sudo apt install i3
 
-## Non-latin characters and meta mepped keys
+## Non-latin characters and meta mapped keys
 
 For keyboard that have both Latin and native characters you pick your language variant, eg for Gemini Russia (Cyrillic):
 
     setxkbmap -model planetgemini -layout ru
 
-But there is a bug in symbols mapping, so you need to fix it manually:
+But there is a bug in symbols mapping, so you need to fix it manually (but maybe fix already in the image):
 
     sudo vim /usr/share/X11/xkb/symbols/planet_vndr/gemini
-
 
 Replace word `backslash` to `slash` in lines 377 and 388 with: 
 ```
@@ -174,12 +187,7 @@ Replace word `backslash` to `slash` in lines 377 and 388 with:
 You then have two groups working with simultaneous pressing of both left and right shift keys being how you swap between which is the active group.
 
 
-#Disable cert check for repo
-
-    sudo vim /etc/apt/apt.conf.d/99disablesslcheck
-
-    Acquire::https::gemian.thinkglobally.org::Verify-Host "false";
-    Acquire::https::gemian.thinkglobally.org::Verify-Peer "false";
+## Used sources
 
 * https://www.oesf.org/forum/index.php?topic=36209.0
 * https://support.planetcom.co.uk/index.php/Linux_Flashing_Guide
