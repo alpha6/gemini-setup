@@ -163,7 +163,9 @@ This basically forces a reinstall of all the libreoffice debian packages.
 
     sudo apt install i3
 
-## Non-latin characters and meta mapped keys
+    sudo apt install fonts-font-awesome libjson-perl
+
+## Non-latin characters and meta mepped keys
 
 For keyboard that have both Latin and native characters you pick your language variant, eg for Gemini Russia (Cyrillic):
 
@@ -183,11 +185,20 @@ Replace word `backslash` to `slash` in lines 377 and 388 with:
     +    key <AC09> { symbols[Group2] = [          l,          L,          slash,         Lstroke ] };
 ```
 
+And second thing with mapping - 
+
 
 You then have two groups working with simultaneous pressing of both left and right shift keys being how you swap between which is the active group.
 
 
 ## Used sources
+
+
+##Installing an NTP client
+
+Let us configure the NTP client to be time synced with the NTP server. For this, you have to install the ntpd daemon on the client machine.
+
+    apt-get install ntpdate
 
 * https://www.oesf.org/forum/index.php?topic=36209.0
 * https://support.planetcom.co.uk/index.php/Linux_Flashing_Guide
