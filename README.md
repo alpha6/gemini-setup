@@ -188,9 +188,9 @@ Replace word `backslash` to `slash` in lines 377 and 388 with:
 
 And second thing with mapping - 
 
-
 You then have two groups working with simultaneous pressing of both left and right shift keys being how you swap between which is the active group.
 
+N.B. In the following map file groups were swapped, so by default you have English layout now.
 
 ## Installing an NTP client
 
