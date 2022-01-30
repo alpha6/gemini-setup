@@ -100,36 +100,37 @@ VERY important -> do not make apt update & upgrade before THIS. If not, you will
 
 * Add the repository key
 
+```
 	wget http://gemian.thinkglobally.org/archive-key.asc
 	sudo apt-key add archive-key.asc
-
+```
 
 * Disable SSL check for gemian.thinkglobally.org
 In case the Let's Encrypt certificate has expired on 30 September and very old version on OpenSSL in the Stetch apt can't validate the repo certifcate. So you need to disable certificate checking for the repo.
 
-
+```
 	sudo nano /etc/apt/apt.conf.d/99disablesslcheck 
 
 	Acquire::https::gemian.thinkglobally.org::Verify-Host "false";
 	Acquire::https::gemian.thinkglobally.org::Verify-Peer "false";
-
+```
 * Upgrade the system
-
+```
 	sudo apt update
 	sudo apt install apt-transport-https
 	sudo apt upgrade
-
+```
 ## DEBIAN 9 Security updates and backports
 
 - Edit the apt config :
-
+```
 	$ sudo nano /etc/apt/sources.list.d/multistrap-debian.list
-
+```
 - Add following to the end:
-
+```
 	deb [arch=arm64] http://security.debian.org/debian-security stretch/updates main contrib non-free
 	deb [arch=arm64] http://http.debian.net/debian stretch-backports main contrib non-free
-
+```
 ## Disable Wifi MAC generation
 
 Since Android is generating a new mac address for your wifi interface at every reboot and Connman is storing the mac address in its services you would need to enter your wifi passwords every time you reboot.
@@ -145,36 +146,36 @@ This will lock down the mac address.
 ## WiFi eats battery whilst sleeping
 
 You need to install connman-plugin-suspend-wmtwifi to avoid this:
-
+```
 	sudo apt install connman-plugin-suspend-wmtwifi
-
+```
 Turns out this plugin just stops the repeated re-connection's to wifi. It still eats lots of battery.
 
 ## Libreoffice
 
 Due to some peculiarity in the system image creation by multistrap our libreoffice installs get their diverts muddled, if you get an issue on upgrading with it complaining about libreoffice do the following:
-
+```
     cd /var/cache/apt/archives
     sudo dpkg --force-all -i libreoffice*.deb
-
+```
 This basically forces a reinstall of all the libreoffice debian packages.
 
 ## i3
-
+```
     sudo apt install i3
 
     sudo apt install fonts-font-awesome libjson-perl
-
+```
 ## Non-latin characters and meta mepped keys
 
 For keyboard that have both Latin and native characters you pick your language variant, eg for Gemini Russia (Cyrillic):
-
+```
     setxkbmap -model planetgemini -layout ru
-
+```
 But there is a bug in symbols mapping, so you need to fix it manually (but maybe fix already in the image):
-
+```
     sudo vim /usr/share/X11/xkb/symbols/planet_vndr/gemini
-
+```
 Replace word `backslash` to `slash` in lines 377 and 388 with: 
 ```
     -    key <AC09> { symbols[Group1] = [     Cyrillic_de,      Cyrillic_DE,      backslash,         Lstroke ] };
@@ -191,14 +192,14 @@ And second thing with mapping -
 You then have two groups working with simultaneous pressing of both left and right shift keys being how you swap between which is the active group.
 
 
-## Used sources
-
-
-##Installing an NTP client
+## Installing an NTP client
 
 Let us configure the NTP client to be time synced with the NTP server. For this, you have to install the ntpd daemon on the client machine.
-
+```
     apt-get install ntpdate
+```
+
+## Used sources
 
 * https://www.oesf.org/forum/index.php?topic=36209.0
 * https://support.planetcom.co.uk/index.php/Linux_Flashing_Guide
